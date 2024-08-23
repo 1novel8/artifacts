@@ -1,22 +1,19 @@
-from pydantic_settings import BaseSettings
-from pydantic import BaseModel
-
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from dotenv import load_dotenv
 
 load_dotenv()
+ENV_FILE = '.env'
 
 
-class ArtifactsSettings(BaseModel):
-    API_BASE_URL: str
-    API_TOKEN: str
+class Artifacts(BaseSettings):
+    api_base_url: str = 'https://api.artifactsmmo.com'
+    api_token: str
+
+    model_config = SettingsConfigDict(env_file=ENV_FILE, env_prefix='ARTIFACTS_')
 
 
 class Settings(BaseSettings):
-    ARTIFACTS: ArtifactsSettings
-
-    class Config:
-        env_file = '.env'
-        env_nested_delimiter = "__"
+    artifacts: Artifacts = Artifacts()
 
 
 settings = Settings()
