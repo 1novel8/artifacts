@@ -1,9 +1,15 @@
-import typing
 import datetime
+import typing
 
-from pydantic import RootModel
-
+from src.character.enum import CooldownReason, FightResult
 from src.common.dto import BaseDto
+from src.map.api.schema import MapSchema
+
+
+class InventorySlot(BaseDto):
+    slot: int
+    code: str
+    quantity: int
 
 
 class CharacterSchema(BaseDto):
@@ -12,7 +18,6 @@ class CharacterSchema(BaseDto):
     level: int
     xp: int
     max_xp: int
-    total_xp: int
     gold: int
     speed: int
     mining_level: int
@@ -77,17 +82,85 @@ class CharacterSchema(BaseDto):
     task_progress: int
     task_total: int
     inventory_max_items: int
-    inventory: list[typing.Any]
+    inventory: list[InventorySlot]
 
 
-class CharacterListSchema(RootModel):
-    root: list[CharacterSchema]
+class CooldownSchema(BaseDto):
+    total_seconds: int
+    remaining_seconds: int
+    started_at: datetime.datetime
+    expiration: datetime.datetime
+    reason: CooldownReason
 
-    def __iter__(self):
-        return iter(self.root)
 
-    def __getitem__(self, item):
-        return self.root[item]
+class BlockedHitsSchema(BaseDto):
+    fire: int
+    earth: int
+    water: int
+    air: int
+    total: int
+
+
+class DropSchema(BaseDto):
+    code: str
+    quantity: int
+
+
+class FightSchema(BaseDto):
+    xp: int
+    gold: int
+    drops: list[DropSchema]
+    turns: int
+    monster_blocked_hits: BlockedHitsSchema
+    player_blocked_hits: BlockedHitsSchema
+    logs: list[str]
+    result: FightResult
+
+
+class CharacterFightDataSchema(BaseDto):
+    cooldown: CooldownSchema
+    fight: FightSchema
+    character: CharacterSchema
+
+
+class SkillInfoSchema(BaseDto):
+    xp: int
+    items: list[DropSchema]
+
+
+class SkillDataSchema(BaseDto):
+    cooldown: CooldownSchema
+    details: SkillInfoSchema
+    character: CharacterSchema
+
+
+class CharacterMovementDataSchema(BaseDto):
+    cooldown: CooldownSchema
+    destination: MapSchema
+    character: CharacterSchema
+
+
+class CraftingRequestSchema(BaseDto):
+    code: str
+    quantity: int
+
+
+class EquipResponseSchema(BaseDto):
+    cooldown: CooldownSchema
+    slot: str
+    item: typing.Any  #TODO: add schema
+    character: CharacterSchema
+
+
+class EquipRequestSchema(BaseDto):
+    code: str
+    slot: str
+    quantity: int
+
+
+class UnequipRequestSchema(BaseDto):
+    slot: str
+    quantity: int
 
 
 class CharacterMoveSchema(BaseDto):
