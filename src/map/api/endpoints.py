@@ -34,4 +34,4 @@ async def map__get(*, x: int, y: int) -> MapSchema:
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return MapSchema.model_validate(response.model_dump())
+    return MapSchema.model_validate(response.data)
