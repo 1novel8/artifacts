@@ -8,6 +8,8 @@ ENV_FILE = '.env'
 class Artifacts(BaseSettings):
     api_base_url: str = 'https://api.artifactsmmo.com'
     api_token: str
+    username: str
+    password: str
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, env_prefix='ARTIFACTS_')
 
