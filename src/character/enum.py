@@ -25,3 +25,11 @@ class FightResult(StrEnum):
 class ItemCode(StrEnum):
     ash_tree = 'ash_wood'
 
+
+class Skill(StrEnum):
+    weaponcrafting = 'weaponcrafting'
+    gearcrafting = 'gearcrafting'
+    jewelrycrafting = 'jewelrycrafting'
+    cooking = 'cooking'
+    woodcutting = 'woodcutting'
+    mining = 'mining'

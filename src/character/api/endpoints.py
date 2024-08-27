@@ -1,11 +1,11 @@
 from pydantic import TypeAdapter
 
-from src.character.api.schemas import (CharacterFightDataSchema,
-                                       CharacterMovementDataSchema,
-                                       CharacterMoveSchema, CharacterSchema,
-                                       CraftingRequestSchema,
-                                       EquipRequestSchema, EquipResponseSchema,
-                                       SkillDataSchema, UnequipRequestSchema)
+from src.character.api.schema import (CharacterFightDataSchema,
+                                      CharacterMovementDataSchema,
+                                      CharacterMoveSchema, CharacterSchema,
+                                      CraftingRequestSchema,
+                                      EquipRequestSchema, EquipResponseSchema,
+                                      SkillDataSchema, UnequipRequestSchema)
 from src.common import status_code
 from src.common.client import ArtifactsAPIClient
 from src.common.exception import UnexpectedStatusCode
@@ -16,7 +16,7 @@ async def characters__all() -> list[CharacterSchema]:
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return TypeAdapter(list[CharacterSchema]).validate_python(response.model_dump())
+    return TypeAdapter(list[CharacterSchema]).validate_python(response.data)
 
 
 async def character__move(*, name: str, request: CharacterMoveSchema) -> CharacterMovementDataSchema:
@@ -24,7 +24,7 @@ async def character__move(*, name: str, request: CharacterMoveSchema) -> Charact
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return CharacterMovementDataSchema.model_validate(response.model_dump())
+    return CharacterMovementDataSchema.model_validate(response.data)
 
 
 async def character__fight(name: str) -> CharacterFightDataSchema:
@@ -32,7 +32,7 @@ async def character__fight(name: str) -> CharacterFightDataSchema:
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return CharacterFightDataSchema.model_validate(response.model_dump())
+    return CharacterFightDataSchema.model_validate(response.data)
 
 
 async def character__gather(*, name: str) -> SkillDataSchema:
@@ -40,7 +40,7 @@ async def character__gather(*, name: str) -> SkillDataSchema:
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return SkillDataSchema.model_validate(response.model_dump())
+    return SkillDataSchema.model_validate(response.data)
 
 
 async def character__craft(name: str, request: CraftingRequestSchema) -> SkillDataSchema:
@@ -48,7 +48,7 @@ async def character__craft(name: str, request: CraftingRequestSchema) -> SkillDa
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return SkillDataSchema.model_validate(response.model_dump())
+    return SkillDataSchema.model_validate(response.data)
 
 
 async def character__unequip(*, name: str, request: UnequipRequestSchema) -> EquipResponseSchema:
@@ -56,7 +56,7 @@ async def character__unequip(*, name: str, request: UnequipRequestSchema) -> Equ
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return EquipResponseSchema.model_validate(response.model_dump())
+    return EquipResponseSchema.model_validate(response.data)
 
 
 async def character__equip(*, name: str, request: EquipRequestSchema) -> EquipResponseSchema:
@@ -64,4 +64,4 @@ async def character__equip(*, name: str, request: EquipRequestSchema) -> EquipRe
 
     if response.status_code != status_code.OK:
         raise UnexpectedStatusCode(response)
-    return EquipResponseSchema.model_validate(response.model_dump())
+    return EquipResponseSchema.model_validate(response.data)

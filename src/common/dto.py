@@ -18,10 +18,10 @@ class BaseDto(BaseModel):
 
 
 class PaginatedDto(BaseDto):
-    total: int = None
-    page: int = None
-    pages: int = None
-    size: int = None
+    total: int | None = None
+    page: int | None = None
+    pages: int | None = None
+    size: int | None = None
 
 
 class ResponseDto(PaginatedDto):

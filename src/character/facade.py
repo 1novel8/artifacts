@@ -2,8 +2,10 @@ import asyncio
 import typing
 
 from src.character.api.endpoints import (character__equip, character__fight,
-                                         character__gather, character__move)
-from src.character.api.schemas import CharacterMoveSchema, EquipRequestSchema
+                                         character__gather, character__move,
+                                         characters__all)
+from src.character.api.schema import (CharacterMoveSchema, CharacterSchema,
+                                      EquipRequestSchema)
 from src.character.enum import ItemCode
 
 
@@ -30,10 +32,6 @@ async def character__gather_items(name: str, item_code: ItemCode, count: int) ->
         await asyncio.sleep(result.cooldown.remaining_seconds)
 
 
-async def character__revive(name: str) -> typing.Any:
-    ...
-
-
 async def character__craft_item(name: str, item_code: str, quantity: int) -> typing.Any:
     # result = await character__move(name=name, data={'x': 2, 'y': 1})
     # await asyncio.sleep(result.cooldown.remaining_seconds)
@@ -47,3 +45,14 @@ async def character__craft_item(name: str, item_code: str, quantity: int) -> typ
         name=name, request=EquipRequestSchema(code=item_code, quantity=quantity, slot='weapon')
     )
     await asyncio.sleep(result.cooldown.remaining_seconds)
+
+
+async def character__revive(character: CharacterSchema) -> typing.Any:
+    ...
+
+
+async def characters__revive() -> None:
+    characters = await characters__all()
+
+    tasks = [character__revive(character) for character in characters]
+    await asyncio.gather(*tasks)
